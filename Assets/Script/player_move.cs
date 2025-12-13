@@ -24,8 +24,10 @@ public class player_move : MonoBehaviour
 
     private void Update()
     {
-        rb.linearVelocity = new Vector3(Inputvec.x * Speed, rb.linearVelocity.y, Inputvec.y * Speed);
-
+        var F = Body.transform.forward;
+        var y = rb.linearVelocity.y;
+        rb.linearVelocity = F * Inputvec.y;
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, y, rb.linearVelocity.z);
 
         //------  ------
         if (Inputvec.magnitude < 0.1f){
@@ -33,8 +35,14 @@ public class player_move : MonoBehaviour
         }
 
 
-        var angle = Mathf.Atan2(Inputvec.x, Inputvec.y) * Mathf.Rad2Deg;
+        var angle = Mathf.Atan2(Inputvec.x, 0) * Mathf.Rad2Deg;
         var q = Quaternion.Euler(0, angle, 0);
-        Body.transform.localRotation = Quaternion.RotateTowards(Body.transform.localRotation, q, Roteto);
+        var Q = Body.transform.localRotation * q;
+        Body.transform.localRotation = Quaternion.RotateTowards(Body.transform.localRotation, Q, Roteto);
+    }
+
+    void OnSpace(InputValue input)
+    {
+
     }
 }
